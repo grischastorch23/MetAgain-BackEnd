@@ -7,7 +7,6 @@ import jakarta.validation.constraints.NotEmpty;
 import java.util.UUID;
 
 @Entity
-@Table(name="Profile")
 public class Profile {
 
     @Id
@@ -21,6 +20,7 @@ public class Profile {
     @Column(unique=true)
     private String email;
     @NotEmpty
+    @Column(unique = true)
     private String username;
     @NotEmpty
     private String passwordHash;
