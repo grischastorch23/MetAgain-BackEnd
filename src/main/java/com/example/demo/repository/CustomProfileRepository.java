@@ -3,14 +3,14 @@ package com.example.demo.repository;
 import com.example.demo.model.Profile;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+@RequiredArgsConstructor
 @Repository
 public class CustomProfileRepository {
 
-    @Autowired
-    private EntityManager entityManager;
+    private final EntityManager entityManager;
 
     public Profile findProfileByUsername(String username) {
         TypedQuery<Profile> query = entityManager.createQuery("SELECT p FROM Profile p WHERE p.username=:username", Profile.class);

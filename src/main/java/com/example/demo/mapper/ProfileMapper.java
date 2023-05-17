@@ -16,4 +16,14 @@ public class ProfileMapper {
         profile.setPasswordHash(createDelegatingPasswordEncoder().encode(profileDto.getPassword()));
         return profile;
     }
+
+    public static ProfileDto toProfile(Profile profile) {
+        ProfileDto profileDto = new ProfileDto();
+        profileDto.setId(profile.getId());
+        profileDto.setFirstName(profile.getFirstName());
+        profileDto.setLastName(profile.getLastName());
+        profileDto.setEmail(profile.getEmail());
+        profileDto.setUsername(profile.getUsername());
+        return profileDto;
+    }
 }

@@ -10,34 +10,26 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Base64;
-
 @RestController
-public class ProfileController {
+public class RegistrationController {
 
     @Autowired
     private ProfileRepository profileRepository;
 
-//    @Autowired
-//    private CustomProfileRepository customProfileRepository;
+    @Autowired
+    private CustomProfileRepository customProfileRepository;
 
-    @PostMapping("/profiles")
+    @PostMapping("/registrations")
     @ResponseStatus(HttpStatus.CREATED)
     public void register(@RequestBody @Valid ProfileDto profileDto) {
         profileRepository.save(ProfileMapper.toProfile(profileDto));
     }
 
     @GetMapping("/users")
-    public Profile findByUsername(@RequestParam String username) {
-        return profileRepository.findByUsername(username);
+    public ProfileDto findByUsername(@RequestParam String username) {
+        return ProfileMapper.toProfile(customProfileRepository.findProfileByUsername(username));
     }
 
-    @GetMapping("/users/authenticated")
-    public Profile findAuthenticatedUser(@RequestHeader String authorization) {
-        String credentialsEncoded = authorization.substring(6);
-        String credentials = new String(Base64.getDecoder().decode(credentialsEncoded));
-        String username = credentials.split(":")[0];
-        return profileRepository.findByUsername(username);
-    }
+
 
 }
