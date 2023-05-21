@@ -26,4 +26,5 @@ public class ProfileMapper {
         profileDto.setUsername(profile.getUsername());
         return profileDto;
     }
+
 }

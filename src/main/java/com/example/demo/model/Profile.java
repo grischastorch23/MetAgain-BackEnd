@@ -26,4 +26,8 @@ public class Profile {
     private String username;
     @NotEmpty
     private String passwordHash;
+
+    private double[] currentLocation = new double[2];
+
+    private boolean incognito = false;
 }

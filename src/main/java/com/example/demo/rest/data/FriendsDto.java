@@ -1,28 +1,24 @@
 package com.example.demo.rest.data;
 
 import jakarta.validation.constraints.NotEmpty;
+import lombok.Data;
 
+import java.util.UUID;
+
+@Data
 public class FriendsDto {
 
     @NotEmpty
-    private String username1;
+    private UUID id;
 
     @NotEmpty
-    private String username2;
+    private ProfileDto profile1;
 
-    public void setUsername1(String username1) {
-        this.username1 = username1;
-    }
+    @NotEmpty
+    private ProfileDto profile2;
 
-    public void setUsername2(String username2) {
-        this.username2 = username2;
-    }
+    private int radius;
 
-    public String getUsername1() {
-        return username1;
-    }
+    private boolean inRadius;
 
-    public String getUsername2() {
-        return username2;
-    }
 }

@@ -25,4 +25,5 @@ public class ProfileDto {
     @NotEmpty
     private String password;
 
+
 }

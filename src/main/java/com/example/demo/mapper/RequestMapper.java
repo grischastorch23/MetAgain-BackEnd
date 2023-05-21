@@ -2,28 +2,21 @@ package com.example.demo.mapper;
 
 import com.example.demo.model.Request;
 import com.example.demo.rest.data.RequestDto;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class RequestMapper {
 
+
     public static RequestDto toRequestDto(Request request) {
         RequestDto requestDto = new RequestDto();
         requestDto.setRequestType(request.getRequestType());
-        requestDto.setFromProfile(ProfileMapper.toProfile(request.getFromProfile()));
-        requestDto.setToProfile(ProfileMapper.toProfile(request.getToProfile()));
+        requestDto.setFromUsername(request.getFromProfile().getUsername());
+        requestDto.setToUsername(request.getToProfile().getUsername());
         requestDto.setId(request.getId());
         return requestDto;
-    }
-
-    public static Request toRequest(RequestDto requestDto) {
-        Request request = new Request();
-        request.setRequestType(requestDto.getRequestType());
-        request.setId(requestDto.getId());
-        request.setFromProfile(ProfileMapper.toProfile(requestDto.getFromProfile()));
-        request.setToProfile(ProfileMapper.toProfile(requestDto.getToProfile()));
-        return request;
     }
 
     public static List<RequestDto> toRequestDtoList(List<Request> requestList) {
