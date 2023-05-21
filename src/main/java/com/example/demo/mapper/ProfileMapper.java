@@ -24,7 +24,16 @@ public class ProfileMapper {
         profileDto.setLastName(profile.getLastName());
         profileDto.setEmail(profile.getEmail());
         profileDto.setUsername(profile.getUsername());
+        profileDto.setIncognito(profile.isIncognito());
         return profileDto;
+    }
+
+    public static Profile updateProfile(Profile oldProfile, ProfileDto newProfile) {
+        oldProfile.setUsername(newProfile.getUsername());
+        oldProfile.setEmail(newProfile.getEmail());
+        oldProfile.setIncognito(newProfile.isIncognito());
+        oldProfile.setPasswordHash(createDelegatingPasswordEncoder().encode(newProfile.getPassword()));
+        return oldProfile;
     }
 
 }

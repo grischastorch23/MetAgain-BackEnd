@@ -49,7 +49,7 @@ public class RequestController {
     @GetMapping
     public List<RequestDto> downloadRequests(@RequestHeader String authorization) {
         Profile profile = profileRepository.findByUsername(AuthorizationStringSplitter.splitAuthorization(authorization)[0]);
-        return RequestMapper.toRequestDtoList(customRequestRepository.findRequestsWithProfile(profile));
+        return RequestMapper.toRequestDtoList(customRequestRepository.findRequestsForProfile(profile));
     }
 
     @PostMapping("/accept")

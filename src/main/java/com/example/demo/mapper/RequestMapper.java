@@ -16,6 +16,7 @@ public class RequestMapper {
         requestDto.setFromUsername(request.getFromProfile().getUsername());
         requestDto.setToUsername(request.getToProfile().getUsername());
         requestDto.setId(request.getId());
+        requestDto.setRadius(request.getRadius());
         return requestDto;
     }
 

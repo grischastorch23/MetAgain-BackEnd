@@ -38,11 +38,11 @@ public class ProfileController {
         return ProfileMapper.toProfile(profileRepository.findByUsername(username));
     }
 
-    @PutMapping("/update")
+    @PutMapping
     public void updateProfile(@RequestHeader String authorization, @RequestBody ProfileDto profile) {
         String username = AuthorizationStringSplitter.splitAuthorization(authorization)[0];
-        customProfileRepository.findByNameAndId(profile.getId(), username);
-        profileRepository.save(ProfileMapper.toProfile(profile));
+        Profile actualProfile = customProfileRepository.findProfileByUsername(username);
+        profileRepository.save(ProfileMapper.updateProfile(actualProfile, profile));
         //TODO handle Exception
     }
 

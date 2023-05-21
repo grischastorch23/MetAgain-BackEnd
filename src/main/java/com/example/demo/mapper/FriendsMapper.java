@@ -22,6 +22,7 @@ public class FriendsMapper {
         FriendsDto friendsDto = new FriendsDto();
         Profile profile1 =  friends.getProfile1();
         Profile profile2 = friends.getProfile2();
+        friendsDto.setId(friends.getId());
         friendsDto.setProfile1(ProfileMapper.toProfile(profile1));
         friendsDto.setProfile2(ProfileMapper.toProfile(profile2));
         friendsDto.setRadius(friends.getRadius());

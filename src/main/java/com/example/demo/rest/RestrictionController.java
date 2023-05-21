@@ -52,4 +52,12 @@ public class RestrictionController {
         //TODO handle Exceptions
     }
 
+    @DeleteMapping
+    public void deleteRestriction(@RequestHeader String authorization, @RequestBody @Valid RestrictionDto restrictionDto) {
+        String username = AuthorizationStringSplitter.splitAuthorization(authorization)[0];
+        Profile profile = profileRepository.findByUsername(username);
+        Restriction actualRestriction = customRestrictionRepository.findByIdAndProfile(restrictionDto.getId(), profile);
+        restrictionRepository.delete(actualRestriction);
+    }
+
 }

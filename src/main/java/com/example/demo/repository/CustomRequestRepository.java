@@ -5,7 +5,6 @@ import com.example.demo.model.Profile;
 import com.example.demo.model.Request;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -26,7 +25,7 @@ public class CustomRequestRepository {
         return query.getSingleResult();
     }
 
-    public List<Request> findRequestsWithProfile(Profile profile) {
+    public List<Request> findRequestsForProfile(Profile profile) {
         TypedQuery<Request> query = entityManager.createQuery("SELECT r FROM Request r WHERE r.toProfile=:profileid", Request.class);
         query.setParameter("profileid", profile);
         return query.getResultList();

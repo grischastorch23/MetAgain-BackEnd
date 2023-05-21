@@ -25,5 +25,7 @@ public class ProfileDto {
     @NotEmpty
     private String password;
 
+    private boolean incognito;
+
 
 }

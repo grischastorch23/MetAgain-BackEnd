@@ -1,6 +1,7 @@
 package com.example.demo.rest;
 
 import com.example.demo.helper.AuthorizationStringSplitter;
+import com.example.demo.mapper.FriendsMapper;
 import com.example.demo.model.Friends;
 import com.example.demo.model.Profile;
 import com.example.demo.repository.CustomFriendsRepository;
@@ -26,11 +27,12 @@ public class FriendsController {
     private CustomProfileRepository customProfileRepository;
 
     @GetMapping
-    public List<Friends> getAllFriends(@RequestHeader String authorization) {
+    public List<FriendsDto> getAllFriends(@RequestHeader String authorization) {
         String username = AuthorizationStringSplitter.splitAuthorization(authorization)[0];
         Profile profile =  customProfileRepository.findProfileByUsername(username);
         List<Friends> friendsList = customFriendsRepository.findFriendsByProfile(profile);
-        return friendsList;
+        return FriendsMapper.toFriendsDto(friendsList);
+        //TODO inkognito nicht sichtbar
     }
 
     @DeleteMapping
