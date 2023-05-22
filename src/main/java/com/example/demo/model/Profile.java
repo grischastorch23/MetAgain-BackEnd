@@ -27,7 +27,7 @@ public class Profile {
     @NotEmpty
     private String passwordHash;
 
-    private double[] currentLocation = new double[2];
+    private double[] currentLocation;
 
     private boolean incognito = false;
 }

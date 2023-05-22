@@ -1,8 +1,6 @@
 package com.example.demo.rest.data;
 
-import com.example.demo.rest.ProfileController;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonView;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
@@ -10,15 +8,22 @@ import lombok.Data;
 import java.util.UUID;
 
 @Data
-public class ProfileDto {
+public class OwnProfileDto {
 
     private UUID id;
-
+    @NotEmpty
     private String firstName;
-
+    @NotEmpty
     private String lastName;
-
+    @NotEmpty
+    @Email
+    private String email;
     @NotEmpty
     private String username;
 
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @NotEmpty
+    private String password;
+
+    private boolean incognito;
 }

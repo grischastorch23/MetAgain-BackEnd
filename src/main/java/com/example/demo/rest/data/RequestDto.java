@@ -12,11 +12,8 @@ public class RequestDto {
 
     private UUID id;
 
-    @NotEmpty
-    private String fromUsername;
-
-    @NotEmpty
-    private String toUsername;
+    @NotNull
+    private ProfileDto profile;
 
     @NotNull
     private RequestType requestType;

@@ -1,6 +1,8 @@
 package com.example.demo.rest;
 
 import com.example.demo.helper.AuthorizationStringSplitter;
+//import com.example.demo.mapper.FriendsMapper;
+import com.example.demo.helper.DistanceCalculator;
 import com.example.demo.mapper.FriendsMapper;
 import com.example.demo.model.Friends;
 import com.example.demo.model.Profile;
@@ -26,13 +28,36 @@ public class FriendsController {
     @Autowired
     private CustomProfileRepository customProfileRepository;
 
+
+
     @GetMapping
     public List<FriendsDto> getAllFriends(@RequestHeader String authorization) {
         String username = AuthorizationStringSplitter.splitAuthorization(authorization)[0];
         Profile profile =  customProfileRepository.findProfileByUsername(username);
         List<Friends> friendsList = customFriendsRepository.findFriendsByProfile(profile);
-        return FriendsMapper.toFriendsDto(friendsList);
+        return FriendsMapper.toFriendsDto(friendsList, profile);
         //TODO inkognito nicht sichtbar
+    }
+
+    @PutMapping
+    public void updateFriends(@RequestHeader String authorization) {
+        String username = AuthorizationStringSplitter.splitAuthorization(authorization)[0];
+        Profile profile = customProfileRepository.findProfileByUsername(username);
+        if (!profile.isIncognito()) {
+            List<Friends> friendsList = customFriendsRepository.findFriendsByProfile(profile);
+            for (Friends friend : friendsList) {
+                double[] coordinates1 = friend.getProfile2().getCurrentLocation();
+                double[] coordinates2 = friend.getProfile1().getCurrentLocation();
+                try {
+                    double distance = DistanceCalculator.calculateDistance(coordinates1[0], coordinates1[1], coordinates2[0], coordinates2[1]);
+                    friend.setInRadius(distance <= friend.getRadius() && friend.getRadius() != 0);
+                } catch (NullPointerException e) {
+                    friend.setInRadius(false);
+                }
+
+            }
+            friendsRepository.saveAll(friendsList);
+        }
     }
 
     @DeleteMapping

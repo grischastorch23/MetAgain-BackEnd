@@ -1,6 +1,7 @@
 package com.example.demo.rest;
 
 import com.example.demo.helper.AuthorizationStringSplitter;
+//import com.example.demo.mapper.RestrictionMapper;
 import com.example.demo.mapper.RestrictionMapper;
 import com.example.demo.model.Profile;
 import com.example.demo.model.Restriction;
@@ -13,8 +14,10 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
+
 @RestController
-@RequestMapping("/restriction")
+@RequestMapping("/restrictions")
 public class RestrictionController {
 
     @Autowired
@@ -28,6 +31,7 @@ public class RestrictionController {
 
     @Autowired
     private CustomProfileRepository customProfileRepository;
+
 
 
 
@@ -53,10 +57,10 @@ public class RestrictionController {
     }
 
     @DeleteMapping
-    public void deleteRestriction(@RequestHeader String authorization, @RequestBody @Valid RestrictionDto restrictionDto) {
+    public void deleteRestriction(@RequestHeader String authorization, @RequestBody UUID id) {
         String username = AuthorizationStringSplitter.splitAuthorization(authorization)[0];
         Profile profile = profileRepository.findByUsername(username);
-        Restriction actualRestriction = customRestrictionRepository.findByIdAndProfile(restrictionDto.getId(), profile);
+        Restriction actualRestriction = customRestrictionRepository.findByIdAndProfile(id, profile);
         restrictionRepository.delete(actualRestriction);
     }
 

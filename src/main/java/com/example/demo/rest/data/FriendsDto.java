@@ -12,10 +12,7 @@ public class FriendsDto {
     private UUID id;
 
     @NotEmpty
-    private ProfileDto profile1;
-
-    @NotEmpty
-    private ProfileDto profile2;
+    private ProfileDto friendsProfile;
 
     private int radius;
 

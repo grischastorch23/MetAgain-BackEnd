@@ -22,4 +22,6 @@ public class Friends {
     private Profile profile2;
 
     private int radius;
+
+    private boolean inRadius;
 }

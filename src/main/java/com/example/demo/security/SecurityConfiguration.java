@@ -23,7 +23,7 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(authorize -> {
                             try {
                                 authorize
-                                        .requestMatchers("/profile/registration").permitAll()
+                                        .requestMatchers("/profiles/registration/**").permitAll()
                                         .anyRequest().authenticated()
                                                 .and().httpBasic().and().csrf().disable();
                             } catch (Exception e) {

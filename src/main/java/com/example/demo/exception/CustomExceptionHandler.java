@@ -16,7 +16,7 @@ public class CustomExceptionHandler {
 
     private static final Logger log = LoggerFactory.getLogger(CustomExceptionHandler.class);
 
-    @ExceptionHandler({MethodArgumentNotValidException.class, ValidationException.class})
+    @ExceptionHandler({MethodArgumentNotValidException.class, ValidationException.class, NoFriendsException.class})
     public ResponseEntity<ApiError> handleViolationException(Exception e) {
         log.error("An exception occurred", e);
         ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, e.getMessage(), 400, "Validation error");
