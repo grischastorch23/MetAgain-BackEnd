@@ -4,6 +4,7 @@ package com.example.demo.repository;
 import com.example.demo.model.Profile;
 import com.example.demo.model.Request;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
 import jakarta.persistence.TypedQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -29,6 +30,18 @@ public class CustomRequestRepository {
         TypedQuery<Request> query = entityManager.createQuery("SELECT r FROM Request r WHERE r.toProfile=:profileid", Request.class);
         query.setParameter("profileid", profile);
         return query.getResultList();
+    }
+
+    public boolean existsKindalike(Request request) {
+        TypedQuery<Request> query = entityManager.createQuery("SELECT r FROM Request r WHERE r.fromProfile=:uid1 AND r.toProfile=:uid2", Request.class);
+        query.setParameter("uid1", request.getToProfile());
+        query.setParameter("uid2", request.getFromProfile());
+        try {
+            query.getSingleResult();
+            return true;
+        } catch (NoResultException e) {
+            return false;
+        }
     }
 
 }

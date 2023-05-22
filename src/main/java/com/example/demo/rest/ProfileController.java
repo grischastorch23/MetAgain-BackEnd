@@ -22,18 +22,13 @@ public class ProfileController {
     private CustomProfileRepository customProfileRepository;
 
 
-    @GetMapping("/login")
-    public OwnProfileDto login(@RequestHeader String authorization) {
-        return downloadProfile(authorization);
-    }
-
     @PostMapping("/registration")
     @ResponseStatus(HttpStatus.CREATED)
     public void register(@RequestBody @Valid OwnProfileDto ownProfileDto) {
         profileRepository.save(ProfileMapper.toProfile(ownProfileDto));
     }
 
-    @GetMapping("/download")
+    @GetMapping
     public OwnProfileDto downloadProfile(@RequestHeader String authorization) {
         String username = AuthorizationStringSplitter.splitAuthorization(authorization)[0];
         return ProfileMapper.toOwnProfileDto(profileRepository.findByUsername(username));

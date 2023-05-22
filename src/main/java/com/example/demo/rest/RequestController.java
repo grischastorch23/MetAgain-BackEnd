@@ -1,7 +1,6 @@
 package com.example.demo.rest;
 
-import com.example.demo.exception.NoFriendsException;
-import com.example.demo.exception.OwnProfileException;
+import com.example.demo.exception.*;
 import com.example.demo.helper.AuthorizationStringSplitter;
 import com.example.demo.mapper.RequestMapper;
 import com.example.demo.model.Friends;
@@ -39,19 +38,27 @@ public class RequestController {
 
 
     @PostMapping("/send")
-    public void sendRequest(@RequestHeader String authorization, @RequestBody @Valid RequestDto requestDto) throws NoFriendsException, OwnProfileException {
+    public void sendRequest(@RequestHeader String authorization, @RequestBody @Valid RequestDto requestDto) throws NoFriendsException, OwnProfileException, AlreadyFriendsException, NotInRadiusException, KindalikeException {
         String fromUsername = AuthorizationStringSplitter.splitAuthorization(authorization)[0];
         Profile author = profileRepository.findByUsername(fromUsername);
         Profile recipient = profileRepository.findByUsername(requestDto.getProfile().getUsername());
+        RequestType requestType = requestDto.getRequestType();
         if (author.equals(recipient)) {
             throw new OwnProfileException();
-        }
-        if (requestDto.getRequestType().equals(RequestType.FOLLOW) ^ customFriendsRepository.exists(author, recipient)) {
-            Request request = RequestMapper.toRequest(requestDto, author, recipient);
-            requestRepository.save(request);
-        } else {
+        } else if (requestType.equals(RequestType.FOLLOW) && customFriendsRepository.exists(author, recipient)) {
+            throw new AlreadyFriendsException();
+        } else if (!requestType.equals(RequestType.FOLLOW) && !customFriendsRepository.exists(author, recipient)) {
             throw new NoFriendsException();
+        } else if (requestType.equals(RequestType.MEET) && !customFriendsRepository.findFriendsByBoth(author, recipient).isInRadius()) {
+            throw new NotInRadiusException();
         }
+
+        Request request = RequestMapper.toRequest(requestDto, author, recipient);
+
+        if (customRequestRepository.existsKindalike(request)) {
+            throw new KindalikeException();
+        }
+        requestRepository.save(request);
     }
 
     @GetMapping
@@ -81,9 +88,11 @@ public class RequestController {
     }
 
     @DeleteMapping
-    public void deleteRequest(@RequestHeader String authorization, @RequestBody @Valid RequestDto requestDto) {
-        Request actualRequest = customRequestRepository.findRequestByIdAndProfile(requestDto.getId(), profileRepository.findByUsername(AuthorizationStringSplitter.splitAuthorization(authorization)[0]));
+    public void deleteRequest(@RequestHeader String authorization, @RequestBody UUID id) {
+        Profile profile = profileRepository.findByUsername(AuthorizationStringSplitter.splitAuthorization(authorization)[0]);
+        Request actualRequest = customRequestRepository.findRequestByIdAndProfile(id, profile);
         requestRepository.delete(actualRequest);
+        //TODO Exception handeln
     }
 
 }

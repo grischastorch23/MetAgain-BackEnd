@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.UUID;
 
 
 @Repository
@@ -40,4 +41,10 @@ public class CustomFriendsRepository {
         return query.getSingleResult();
     }
 
+    public Friends findByIdAndProfile(UUID id, Profile profile) {
+        TypedQuery<Friends> query = entityManager.createQuery("SELECT f FROM Friends f WHERE id=:uid AND (f.profile1=:profile OR f.profile2=:profile)", Friends.class);
+        query.setParameter("profile", profile);
+        query.setParameter("uid", id);
+        return query.getSingleResult();
+    }
 }

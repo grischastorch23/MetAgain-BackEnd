@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/meetings")
@@ -37,9 +38,9 @@ public class MeetingController {
     }
 
     @DeleteMapping
-    public void deleteMeeting(@RequestHeader String authorization, @RequestBody MeetingDto meetingDto) {
+    public void deleteMeeting(@RequestHeader String authorization, @RequestBody UUID id) {
         String username = AuthorizationStringSplitter.splitAuthorization(authorization)[0];
-        Meeting actualMeeting = customMeetingRepository.findByIdAndProfile(meetingDto.getId(), profileRepository.findByUsername(username));
+        Meeting actualMeeting = customMeetingRepository.findByIdAndProfile(id, profileRepository.findByUsername(username));
         meetingRepository.delete(actualMeeting);
         //TODO handle Exceptions
     }

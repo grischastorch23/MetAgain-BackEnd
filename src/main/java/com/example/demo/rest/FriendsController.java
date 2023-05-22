@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/friends")
@@ -60,9 +61,13 @@ public class FriendsController {
         }
     }
 
+    //TODO add Friends instead of accepting request
+
     @DeleteMapping
-    public void deleteFriend(@RequestHeader String authorization, @RequestBody FriendsDto friendsDto) {
-        Friends actualFriends = friendsRepository.findById(friendsDto.getId()).get();
+    public void deleteFriend(@RequestHeader String authorization, @RequestBody UUID id) {
+        String username = AuthorizationStringSplitter.splitAuthorization(authorization)[0];
+        Profile profile = customProfileRepository.findProfileByUsername(username);
+        Friends actualFriends = customFriendsRepository.findByIdAndProfile(id, profile);
         friendsRepository.delete(actualFriends);
         //TODO throw and handle Exception
     }
