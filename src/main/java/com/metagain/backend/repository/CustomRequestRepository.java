@@ -20,9 +20,9 @@ public class CustomRequestRepository {
     private EntityManager entityManager;
 
     public Request findRequestByIdAndProfile(UUID id, Profile profile) {
-        TypedQuery<Request> query = entityManager.createQuery("SELECT r FROM Request r WHERE r.id=:uid AND r.toProfile=:profileid", Request.class);
+        TypedQuery<Request> query = entityManager.createQuery("SELECT r FROM Request r WHERE r.id=:uid AND r.toProfile.id=:profileId", Request.class);
         query.setParameter("uid", id);
-        query.setParameter("profileid", profile);
+        query.setParameter("profileId", profile.getId());
         return query.getSingleResult();
     }
 

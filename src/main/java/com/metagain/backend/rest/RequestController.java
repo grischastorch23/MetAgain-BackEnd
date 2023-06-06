@@ -1,13 +1,14 @@
 package com.metagain.backend.rest;
 
-import com.example.demo.exception.*;
+
 import com.metagain.backend.exception.*;
 import com.metagain.backend.helper.AuthorizationStringSplitter;
+import com.metagain.backend.mapper.FriendsMapper;
 import com.metagain.backend.mapper.RequestMapper;
+import com.metagain.backend.model.Friends;
 import com.metagain.backend.model.Profile;
 import com.metagain.backend.model.Request;
 import com.metagain.backend.model.types.RequestType;
-import com.example.demo.repository.*;
 import com.metagain.backend.repository.*;
 import com.metagain.backend.rest.data.RequestDto;
 import jakarta.validation.Valid;
@@ -35,6 +36,9 @@ public class RequestController {
 
     @Autowired
     private CustomRequestRepository customRequestRepository;
+
+    @Autowired
+    private CustomProfileRepository customProfileRepository;
 
 
 
@@ -75,6 +79,20 @@ public class RequestController {
         Request actualRequest = customRequestRepository.findRequestByIdAndProfile(id, profile);
         requestRepository.delete(actualRequest);
         //TODO Exception handeln
+    }
+
+    @PatchMapping(path = "/{id}")
+    public void acceptRequest(@RequestHeader String authorization, @PathVariable UUID id) {
+        String username = AuthorizationStringSplitter.splitAuthorization(authorization)[0];
+        Profile profile = customProfileRepository.findProfileByUsername(username);
+        Request actualRequest = customRequestRepository.findRequestByIdAndProfile(id, profile);
+        if (actualRequest.getRequestType().equals(RequestType.FOLLOW)) {
+            Friends friends = FriendsMapper.toFriends(profile, actualRequest.getFromProfile());
+            friendsRepository.save(friends);
+            requestRepository.delete(actualRequest);
+        } else {
+            //TODO
+        }
     }
 
 }

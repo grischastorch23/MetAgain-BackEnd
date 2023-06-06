@@ -42,8 +42,8 @@ public class CustomFriendsRepository {
     }
 
     public Friends findByIdAndProfile(UUID id, Profile profile) {
-        TypedQuery<Friends> query = entityManager.createQuery("SELECT f FROM Friends f WHERE id=:uid AND (f.profile1=:profile OR f.profile2=:profile)", Friends.class);
-        query.setParameter("profile", profile);
+        TypedQuery<Friends> query = entityManager.createQuery("SELECT f FROM Friends f WHERE id=:uid AND (f.profile1.id=:profile OR f.profile2.id=:profile)", Friends.class);
+        query.setParameter("profile", profile.getId());
         query.setParameter("uid", id);
         return query.getSingleResult();
     }

@@ -7,7 +7,6 @@ import com.metagain.backend.model.Friends;
 import com.metagain.backend.model.Profile;
 import com.metagain.backend.model.Request;
 import com.metagain.backend.model.types.RequestType;
-import com.example.demo.repository.*;
 import com.metagain.backend.repository.*;
 import com.metagain.backend.rest.data.FriendsDto;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,22 +59,8 @@ public class FriendsController {
         }
     }
 
-    @PostMapping
-    public void addFriend(@RequestHeader String authorization, @RequestBody UUID requestId) {
-        String username = AuthorizationStringSplitter.splitAuthorization(authorization)[0];
-        Profile profile = customProfileRepository.findProfileByUsername(username);
-        Request actualRequest = customRequestRepository.findRequestByIdAndProfile(requestId, profile);
-        if (actualRequest.getRequestType().equals(RequestType.FOLLOW)) {
-            Friends friends = FriendsMapper.toFriends(profile, actualRequest.getFromProfile());
-            friendsRepository.save(friends);
-            requestRepository.delete(actualRequest);
-        } else {
-            //TODO
-        }
-    }
-
-    @DeleteMapping
-    public void deleteFriend(@RequestHeader String authorization, @RequestBody UUID id) {
+    @DeleteMapping(path = "/friends/{id}")
+    public void deleteFriend(@RequestHeader String authorization, @PathVariable UUID id) {
         String username = AuthorizationStringSplitter.splitAuthorization(authorization)[0];
         Profile profile = customProfileRepository.findProfileByUsername(username);
         Friends actualFriends = customFriendsRepository.findByIdAndProfile(id, profile);

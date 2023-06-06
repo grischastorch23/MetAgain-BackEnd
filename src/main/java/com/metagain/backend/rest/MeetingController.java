@@ -6,7 +6,6 @@ import com.metagain.backend.model.Meeting;
 import com.metagain.backend.model.Profile;
 import com.metagain.backend.model.Request;
 import com.metagain.backend.model.types.RequestType;
-import com.example.demo.repository.*;
 import com.metagain.backend.repository.*;
 import com.metagain.backend.rest.data.MeetingDto;
 import org.springframework.beans.factory.annotation.Autowired;
