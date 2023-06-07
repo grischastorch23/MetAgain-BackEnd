@@ -55,18 +55,5 @@ public class MeetingController {
         meetingRepository.save(meeting);
     }
 
-    @PostMapping
-    public void addMeeting(@RequestHeader String authorization, @RequestBody UUID requestId) {
-        String username = AuthorizationStringSplitter.splitAuthorization(authorization)[0];
-        Profile profile = customProfileRepository.findProfileByUsername(username);
-        Request actualRequest = customRequestRepository.findRequestByIdAndProfile(requestId, profile);
-        Profile fromProfile = actualRequest.getFromProfile();
-        if (actualRequest.getRequestType().equals(RequestType.MEET)) {
-            Meeting meeting = new Meeting();
-            meeting.setProfile1(profile);
-            meeting.setProfile2(fromProfile);
-            meetingRepository.save(meeting);
-        }
-        //TODO
-    }
+
 }

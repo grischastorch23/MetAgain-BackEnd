@@ -44,20 +44,6 @@ public class FriendsController {
         return FriendsMapper.toFriendsDto(friendsList, profile);
     }
 
-    @PutMapping
-    public void updateFriends(@RequestHeader String authorization, @RequestBody UUID requestId) {
-        String username = AuthorizationStringSplitter.splitAuthorization(authorization)[0];
-        Profile profile = customProfileRepository.findProfileByUsername(username);
-        Request request = customRequestRepository.findRequestByIdAndProfile(requestId, profile);
-        Profile fromProfile = request.getFromProfile();
-        if (request.getRequestType().equals(RequestType.RADIUS)) {
-            Friends friends = customFriendsRepository.findFriendsByBoth(profile, fromProfile);
-            friends.setRadius(request.getRadius());
-            friendsRepository.save(friends);
-        } else {
-            //TODO
-        }
-    }
 
     @DeleteMapping(path = "/friends/{id}")
     public void deleteFriend(@RequestHeader String authorization, @PathVariable UUID id) {

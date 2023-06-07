@@ -4,8 +4,10 @@ package com.metagain.backend.rest;
 import com.metagain.backend.exception.*;
 import com.metagain.backend.helper.AuthorizationStringSplitter;
 import com.metagain.backend.mapper.FriendsMapper;
+import com.metagain.backend.mapper.MeetingMapper;
 import com.metagain.backend.mapper.RequestMapper;
 import com.metagain.backend.model.Friends;
+import com.metagain.backend.model.Meeting;
 import com.metagain.backend.model.Profile;
 import com.metagain.backend.model.Request;
 import com.metagain.backend.model.types.RequestType;
@@ -39,6 +41,9 @@ public class RequestController {
 
     @Autowired
     private CustomProfileRepository customProfileRepository;
+
+    @Autowired
+    private MeetingRepository meetingRepository;
 
 
 
@@ -90,8 +95,15 @@ public class RequestController {
             Friends friends = FriendsMapper.toFriends(profile, actualRequest.getFromProfile());
             friendsRepository.save(friends);
             requestRepository.delete(actualRequest);
-        } else {
-            //TODO
+        } else if (actualRequest.getRequestType().equals(RequestType.MEET)){
+            Meeting meeting = new Meeting();
+            meeting.setProfile1(profile);
+            meeting.setProfile2(actualRequest.getFromProfile());
+            meetingRepository.save(meeting);
+        } else if (actualRequest.getRequestType().equals(RequestType.RADIUS)) {
+            Friends friends = customFriendsRepository.findFriendsByBoth(profile, actualRequest.getFromProfile());
+            friends.setRadius(actualRequest.getRadius());
+            friendsRepository.save(friends);
         }
     }
 
