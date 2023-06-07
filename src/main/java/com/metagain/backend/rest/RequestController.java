@@ -68,6 +68,7 @@ public class RequestController {
         if (customRequestRepository.existsKindalike(request)) {
             throw new KindalikeException();
         }
+        System.out.println("Bis hier");
         requestRepository.save(request);
     }
 
