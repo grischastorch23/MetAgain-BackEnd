@@ -95,7 +95,6 @@ public class RequestController {
         if (actualRequest.getRequestType().equals(RequestType.FOLLOW)) {
             Friends friends = FriendsMapper.toFriends(profile, actualRequest.getFromProfile());
             friendsRepository.save(friends);
-            requestRepository.delete(actualRequest);
         } else if (actualRequest.getRequestType().equals(RequestType.MEET)){
             Meeting meeting = new Meeting();
             meeting.setProfile1(profile);
@@ -105,7 +104,10 @@ public class RequestController {
             Friends friends = customFriendsRepository.findFriendsByBoth(profile, actualRequest.getFromProfile());
             friends.setRadius(actualRequest.getRadius());
             friendsRepository.save(friends);
+        } else {
+            return;
         }
+        requestRepository.delete(actualRequest);
     }
 
 }
