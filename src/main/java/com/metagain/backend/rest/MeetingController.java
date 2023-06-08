@@ -39,8 +39,8 @@ public class MeetingController {
         return MeetingMapper.toMeetingDtoList(customMeetingRepository.getMeetingsForProfile(profile), profile);
     }
 
-    @DeleteMapping
-    public void deleteMeeting(@RequestHeader String authorization, @RequestBody UUID id) {
+    @DeleteMapping(path = "/{id}")
+    public void deleteMeeting(@RequestHeader String authorization, @PathVariable UUID id) {
         String username = AuthorizationStringSplitter.splitAuthorization(authorization)[0];
         Meeting actualMeeting = customMeetingRepository.findByIdAndProfile(id, profileRepository.findByUsername(username));
         meetingRepository.delete(actualMeeting);
