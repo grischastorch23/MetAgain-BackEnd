@@ -23,7 +23,7 @@ public class CustomMeetingRepository {
     }
 
     public Meeting findByIdAndProfile(UUID id, Profile profile) {
-        TypedQuery<Meeting> query = entityManager.createQuery("SELECT m FROM Meeting m WHERE m.id=:uid AND r.toProfile=:profileid", Meeting.class);
+        TypedQuery<Meeting> query = entityManager.createQuery("SELECT m FROM Meeting m WHERE m.id=:uid AND (m.profile1=:profileid OR m.profile2=:profileid)", Meeting.class);
         query.setParameter("uid", id);
         query.setParameter("profileid", profile);
         return query.getSingleResult();
