@@ -45,7 +45,7 @@ public class FriendsController {
     }
 
 
-    @DeleteMapping(path = "/friends/{id}")
+    @DeleteMapping(path = "/{id}")
     public void deleteFriend(@RequestHeader String authorization, @PathVariable UUID id) {
         String username = AuthorizationStringSplitter.splitAuthorization(authorization)[0];
         Profile profile = customProfileRepository.findProfileByUsername(username);

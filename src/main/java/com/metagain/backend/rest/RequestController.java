@@ -79,8 +79,8 @@ public class RequestController {
     }
 
 
-    @DeleteMapping
-    public void deleteRequest(@RequestHeader String authorization, @RequestBody UUID id) {
+    @DeleteMapping(path = "/{id}")
+    public void deleteRequest(@RequestHeader String authorization, @PathVariable UUID id) {
         Profile profile = profileRepository.findByUsername(AuthorizationStringSplitter.splitAuthorization(authorization)[0]);
         Request actualRequest = customRequestRepository.findRequestByIdAndProfile(id, profile);
         requestRepository.delete(actualRequest);
