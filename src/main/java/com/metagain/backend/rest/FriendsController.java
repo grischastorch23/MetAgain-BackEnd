@@ -2,6 +2,7 @@ package com.metagain.backend.rest;
 
 import com.metagain.backend.helper.AuthorizationStringSplitter;
 //import com.example.demo.mapper.FriendsMapper;
+import com.metagain.backend.helper.DistanceCalculator;
 import com.metagain.backend.mapper.FriendsMapper;
 import com.metagain.backend.model.Friends;
 import com.metagain.backend.model.Profile;
@@ -41,6 +42,20 @@ public class FriendsController {
         String username = AuthorizationStringSplitter.splitAuthorization(authorization)[0];
         Profile profile =  customProfileRepository.findProfileByUsername(username);
         List<Friends> friendsList = customFriendsRepository.findFriendsByProfile(profile);
+
+        for (Friends friend : friendsList) {
+            double[] coordinates1 = friend.getProfile2().getCurrentLocation();
+            double[] coordinates2 = friend.getProfile1().getCurrentLocation();
+            try {
+                double distance = DistanceCalculator.calculateDistance(coordinates1[0], coordinates1[1], coordinates2[0], coordinates2[1]);
+                if (!FriendsMapper.getOtherFriend(friend, profile).isIncognito()) {
+                    friend.setInRadius(distance <= friend.getRadius() && friend.getRadius() != 0);
+                }
+            } catch (NullPointerException e) {
+                friend.setInRadius(false);
+            }
+
+        }
         return FriendsMapper.toFriendsDto(friendsList, profile);
     }
 

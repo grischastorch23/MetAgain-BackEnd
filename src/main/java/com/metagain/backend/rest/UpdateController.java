@@ -29,7 +29,11 @@ public class UpdateController {
     public void updateLocation(@RequestHeader String authorization, @RequestBody double[] location) {
         String username = AuthorizationStringSplitter.splitAuthorization(authorization)[0];
         Profile profile = profileRepository.findByUsername(username);
-        profile.setCurrentLocation(location);
+        if (location[0] == 420 && location[1] == 420) {
+            profile.setCurrentLocation(null);
+        } else {
+            profile.setCurrentLocation(location);
+        }
         profileRepository.save(profile);
         if (!profile.isIncognito()) {
             List<Friends> friendsList = customFriendsRepository.findFriendsByProfile(profile);

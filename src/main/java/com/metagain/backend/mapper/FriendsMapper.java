@@ -34,4 +34,12 @@ public class FriendsMapper {
         return friends;
     }
 
+    public static Profile getOtherFriend(Friends friends, Profile profile) {
+        if (friends.getProfile1().equals(profile)) {
+            return friends.getProfile2();
+        } else {
+            return friends.getProfile1();
+        }
+    }
+
 }
