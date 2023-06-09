@@ -34,9 +34,7 @@ public class ProfileMapper {
         oldProfile.setEmail(newProfile.getEmail());
         oldProfile.setIncognito(newProfile.isIncognito());
         oldProfile.setPasswordHash(createDelegatingPasswordEncoder().encode(newProfile.getPassword()));
-        if (oldProfile.isIncognito()) {
-            oldProfile.setCurrentLocation(null);
-        }
+
         return oldProfile;
     }
 
