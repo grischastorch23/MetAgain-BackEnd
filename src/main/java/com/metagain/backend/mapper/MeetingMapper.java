@@ -14,7 +14,7 @@ public class MeetingMapper {
         Profile friendsProfile = (meeting.getProfile1().equals(profile)) ? meeting.getProfile2() : meeting.getProfile1();
         meetingDto.setProfile(ProfileMapper.toProfileDto(friendsProfile));
         meetingDto.setId(meeting.getId());
-        meetingDto.setMeetingPoint(meetingDto.getMeetingPoint());
+        meetingDto.setMeetingPoint(meeting.getMeetingPoint());
         return meetingDto;
     }
 
