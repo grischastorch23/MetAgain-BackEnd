@@ -7,6 +7,7 @@ import com.metagain.backend.repository.*;
 import com.metagain.backend.rest.data.OwnProfileDto;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -44,7 +45,9 @@ public class ProfileController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public void register(@RequestBody @Valid OwnProfileDto ownProfileDto) {
+
         profileRepository.save(ProfileMapper.toProfile(ownProfileDto));
+
     }
 
     @GetMapping

@@ -24,6 +24,6 @@ public class Meeting {
     @JoinColumn(name = "profile_2", referencedColumnName = "id")
     private Profile profile2;
 
-    private double[] meetingPoint = new double[2];
+    private double[] meetingPoint;
 
 }
